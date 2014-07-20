@@ -12,6 +12,13 @@
 			<input type="submit" /> 
 		</form>
 		<div id="feed">
+			<h2> Cheeps </h2>
+			{% for cheep in cheeps %}
+			<div class = "cheep">
+				<b>{{ cheep[0] }} </b>
+				<p>{{ cheep[2] }} </p>
+			</div>	
+			{% endfor %}
 		</div>
 	</body>
 </html>

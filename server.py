@@ -1,9 +1,21 @@
 import sqlite3
 import time
-from flask import Flask, request, g
+from flask import Flask, request, g, render_template, redirect
 
 app = Flask(__name__)
 DATABASE = 'cheeps.db'
+
+@app.route("/")
+def hello():
+	cheeps = db_read_cheeps()
+	print(cheeps)
+	return render_template('index.html', cheeps =cheeps)
+
+@app.route("/api/cheep", methods=["POST"])
+def receive_cheep():
+	print(request.form)
+	db_add_cheep(request.form['name'], request.form['cheep'])
+	return redirect("/")
 
 def get_db():
 	db = getattr(g, '_database', None)
@@ -28,17 +40,6 @@ def close_connection(exception):
 	db = getattr(g, '_database', None)
 	if db is not None:
 		db.close()
-
-@app.route("/")
-def hello():
-	cheeps = db_read_cheeps()
-	pritn(cheeps)
-	return app.send_static_file('index.html')
-
-@app.route("/api/cheep", methods=["POST"])
-def receive_cheep():
-	print(request.form)
-	return "Success!"
 
 if __name__ == "__main__":
 	app.run()
